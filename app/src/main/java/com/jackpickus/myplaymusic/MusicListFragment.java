@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,14 +43,30 @@ public class MusicListFragment extends Fragment {
         mMusicRecyclerView.setAdapter(mAdapter);
     }
 
-    private class MusicHolder extends RecyclerView.ViewHolder {
+    private class MusicHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView mTitleTextView;
+        private Music mMusic;
+
+        private TextView mTitleTextView;
+        private TextView mArtistTextView;
 
         public MusicHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
 
-            mTitleTextView = (TextView) itemView;
+            mTitleTextView = itemView.findViewById(R.id.list_item_music_title_text_view);
+            mArtistTextView = itemView.findViewById(R.id.list_item_music_artist_text_view);
+        }
+
+        public void bindMusic(Music music) {
+            mMusic = music;
+            mTitleTextView.setText(mMusic.getTitle());
+            mArtistTextView.setText(mMusic.getArtist());
+        }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getActivity(), mMusic.getTitle() + " clicked!", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -66,14 +83,14 @@ public class MusicListFragment extends Fragment {
         @Override
         public MusicHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            View view = layoutInflater.inflate(R.layout.list_item_music, parent, false);
             return new MusicHolder(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull MusicHolder holder, int position) {
             Music music = mMusics.get(position);
-            holder.mTitleTextView.setText(music.getTitle());
+            holder.bindMusic(music);
         }
 
         @Override

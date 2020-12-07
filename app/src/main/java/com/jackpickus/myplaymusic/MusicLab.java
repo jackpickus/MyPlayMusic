@@ -22,6 +22,8 @@ public class MusicLab {
         for (int i = 0; i < 100; i++) {
             Music m = new Music();
             m.setTitle("Song #" + i);
+            m.setArtist("Artist #"+ i);
+            m.setAlbum("Album #" + i);
             mMusics.add(m);
         }
     }
