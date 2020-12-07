@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MyPlayMusic</string>
+    <string name="songs">Songs</string>
+    <string name="artists">Artists</string>
+    <string name="albums">Albums</string>
+    <string name="playlists">Playlists</string>
+    <string name="folders">Folders</string>
+</resources>
