@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class MusicLab {
     private static MusicLab sMusicLab;
@@ -30,6 +31,15 @@ public class MusicLab {
 
     public List<Music> getMusics() {
         return mMusics;
+    }
+
+    public Music getMusic(UUID id) {
+        for (Music m : mMusics) {
+            if (m.getId().equals(id)) {
+                return m;
+            }
+        }
+        return null;
     }
 
 }

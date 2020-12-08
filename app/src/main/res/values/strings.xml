@@ -5,4 +5,7 @@
     <string name="albums">Albums</string>
     <string name="playlists">Playlists</string>
     <string name="folders">Folders</string>
+    <string name="play_button">play button</string>
+    <string name="rewind_button">rewind button</string>
+    <string name="fastword_button">fastword button</string>
 </resources>
