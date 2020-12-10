@@ -3,6 +3,8 @@ package com.jackpickus.myplaymusic;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -32,10 +34,17 @@ public class MusicFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         UUID musicId = (UUID) getArguments().getSerializable(ARG_MUSIC_ID);
 
         mMusic = MusicLab.get(getActivity()).getMusic(musicId);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_music, menu);
     }
 
     @Nullable

@@ -40,6 +40,13 @@ public class MusicPagerActivity extends AppCompatActivity {
         mMusics = MusicLab.get(this).getMusics();
         mViewPager2.setAdapter(new MusicSlidePagerAdapter(this));
 
+        for (int i = 0; i < mMusics.size(); i++) {
+            if (mMusics.get(i).getId().equals(musicId)) {
+                mViewPager2.setCurrentItem(i);
+                break;
+            }
+        }
+
     }
 
     private class MusicSlidePagerAdapter extends FragmentStateAdapter {

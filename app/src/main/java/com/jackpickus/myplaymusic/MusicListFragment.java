@@ -13,8 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import java.util.List;
+import java.util.Objects;
 
 public class MusicListFragment extends Fragment {
 
@@ -41,6 +41,8 @@ public class MusicListFragment extends Fragment {
         mAdapter = new MusicAdapter(musics);
         mMusicRecyclerView.setAdapter(mAdapter);
     }
+
+
 
     private class MusicHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

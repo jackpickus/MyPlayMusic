@@ -8,4 +8,5 @@
     <string name="play_button">play button</string>
     <string name="rewind_button">rewind button</string>
     <string name="fastword_button">fastword button</string>
+    <string name="more_vert">More info</string>
 </resources>
