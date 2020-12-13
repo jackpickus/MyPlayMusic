@@ -1,17 +1,21 @@
 package com.jackpickus.myplaymusic;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.UUID;
 
@@ -21,6 +25,7 @@ public class MusicFragment extends Fragment {
     private Music mMusic;
     private TextView mSongTitleTextView;
     private TextView mArtistTextView;
+    private ImageButton mLoveImageButton;
 
     public static MusicFragment newInstance(UUID musicId) {
         Bundle args = new Bundle();
@@ -54,8 +59,26 @@ public class MusicFragment extends Fragment {
         mSongTitleTextView = view.findViewById(R.id.song_title);
         mArtistTextView = view.findViewById(R.id.artist);
 
+        mLoveImageButton = view.findViewById(R.id.love_image_button);
+        if (mMusic.getFavorited()) {
+            mLoveImageButton.setColorFilter(Color.RED);
+        }
+
         mSongTitleTextView.setText(mMusic.getTitle());
         mArtistTextView.setText(mMusic.getArtist());
+
+        mLoveImageButton.setOnClickListener(v -> {
+            mLoveImageButton.setSelected(!mLoveImageButton.isSelected());
+
+            if (mLoveImageButton.isSelected()) {
+                mLoveImageButton.setColorFilter(Color.RED);
+                mMusic.setFavorited(true);
+            } else {
+                mLoveImageButton.setColorFilter(Color.argb(255, 52, 52, 52));
+                mMusic.setFavorited(false);
+            }
+
+        });
 
         return view;
     }

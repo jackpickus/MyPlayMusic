@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <TextView
@@ -29,17 +29,17 @@
             android:id="@+id/rewind_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:contentDescription="@string/rewind_button"
             android:padding="4dp"
-            app:srcCompat="@drawable/ic_baseline_fast_rewind_24"
-            android:contentDescription="@string/rewind_button" />
+            app:srcCompat="@drawable/ic_baseline_fast_rewind_24" />
 
         <ImageButton
             android:id="@+id/play_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:contentDescription="@string/play_button"
             android:padding="4dp"
-            app:srcCompat="@drawable/ic_baseline_play_arrow_24"
-            android:contentDescription="@string/play_button" />
+            app:srcCompat="@drawable/ic_baseline_play_arrow_24" />
 
         <ImageButton
             android:id="@+id/fastforward_image"
@@ -49,6 +49,14 @@
             android:padding="4dp"
             app:srcCompat="@drawable/ic_baseline_fast_forward_24"
             tools:srcCompat="@drawable/ic_baseline_fast_forward_24" />
+
+        <ImageButton
+            android:id="@+id/love_image_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/love_image_button"
+            android:padding="4dp"
+            app:srcCompat="@drawable/ic_baseline_favorite_24" />
 
     </LinearLayout>
 

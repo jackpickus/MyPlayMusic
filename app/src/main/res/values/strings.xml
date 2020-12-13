@@ -12,4 +12,5 @@
     <string name="artist">Artist</string>
     <string name="song_info">Song Info</string>
     <string name="actions">Song Actions</string>
+    <string name="love_image_button">love song image button</string>
 </resources>
