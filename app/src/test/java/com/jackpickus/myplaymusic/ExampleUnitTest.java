@@ -11,7 +11,15 @@ import static org.junit.Assert.*;
  */
 public class ExampleUnitTest {
     @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+    public void myFavoriteIsFalse() {
+        Favorite fav = new Favorite();
+        assertFalse(fav.getIsFavorite());
+    }
+
+    @Test
+    public void setFavoriteTrue() {
+        Favorite favorite = new Favorite();
+        favorite.setIsFavorite(true);
+        assertTrue(favorite.getIsFavorite());
     }
 }
