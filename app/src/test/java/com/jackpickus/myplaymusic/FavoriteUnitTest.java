@@ -1,5 +1,6 @@
 package com.jackpickus.myplaymusic;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -9,17 +10,23 @@ import static org.junit.Assert.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleUnitTest {
+public class FavoriteUnitTest {
+
+    Favorite fav;
+
+    @Before
+    public void beforeTests() {
+        fav = new Favorite();
+    }
+
     @Test
     public void myFavoriteIsFalse() {
-        Favorite fav = new Favorite();
         assertFalse(fav.getIsFavorite());
     }
 
     @Test
     public void setFavoriteTrue() {
-        Favorite favorite = new Favorite();
-        favorite.setIsFavorite(true);
-        assertTrue(favorite.getIsFavorite());
+        fav.setIsFavorite(true);
+        assertTrue(fav.getIsFavorite());
     }
 }

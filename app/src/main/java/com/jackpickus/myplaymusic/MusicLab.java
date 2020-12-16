@@ -21,7 +21,8 @@ public class MusicLab {
     private MusicLab(Context context) {
         mMusics = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
-            Music m = new Music();
+            Favorite favorite = new Favorite();
+            Music m = new Music(favorite);
             m.setTitle("Song #" + i);
             m.setArtist("Artist #"+ i);
             m.setAlbum("Album #" + i);

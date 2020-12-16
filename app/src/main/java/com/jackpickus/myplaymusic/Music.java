@@ -7,11 +7,11 @@ public class Music {
     private String title;
     private String artist;
     private String album;
-    private Boolean isFavorited;
+    private Favorite favorite;
 
-    public Music() {
+    public Music(Favorite favorite) {
         mId = UUID.randomUUID();
-        isFavorited = false;
+        this.favorite = favorite;
     }
 
     public String getTitle() {
@@ -43,10 +43,10 @@ public class Music {
     }
 
     public Boolean getFavorited() {
-        return isFavorited;
+        return this.favorite.getIsFavorite();
     }
 
     public void setFavorited(Boolean favorited) {
-        isFavorited = favorited;
+        this.favorite.setIsFavorite(favorited);
     }
 }
