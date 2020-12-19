@@ -1,4 +1,4 @@
-package com.jackpickus.myplaymusic;
+package com.jackpickus.myplaymusic.models;
 
 import java.util.UUID;
 
@@ -7,11 +7,11 @@ public class Music {
     private String title;
     private String artist;
     private String album;
-    private Favorite favorite;
+    private Boolean favorite;
 
-    public Music(Favorite favorite) {
+    public Music() {
         mId = UUID.randomUUID();
-        this.favorite = favorite;
+        favorite = false;
     }
 
     public String getTitle() {
@@ -43,10 +43,10 @@ public class Music {
     }
 
     public Boolean getFavorited() {
-        return this.favorite.getIsFavorite();
+        return this.favorite;
     }
 
-    public void setFavorited(Boolean favorited) {
-        this.favorite.setIsFavorite(favorited);
+    public void setFavorited(Boolean favorite) {
+        this.favorite = favorite;
     }
 }

@@ -1,6 +1,5 @@
 package com.jackpickus.myplaymusic;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
+import com.jackpickus.myplaymusic.models.Music;
 
 import java.util.UUID;
 
@@ -43,7 +42,16 @@ public class MusicFragment extends Fragment {
 
         UUID musicId = (UUID) getArguments().getSerializable(ARG_MUSIC_ID);
 
-        mMusic = MusicLab.get(getActivity()).getMusic(musicId);
+        mMusic = findMusicId(musicId);
+    }
+
+    private Music findMusicId(UUID id) {
+        for (Music m : MusicListFragment.newMusics) {
+            if (m.getId().equals(id)) {
+                return m;
+            }
+        }
+        return null;
     }
 
     @Override

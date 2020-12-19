@@ -12,6 +12,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.jackpickus.myplaymusic.models.Music;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -37,7 +39,7 @@ public class MusicPagerActivity extends AppCompatActivity {
 
         mViewPager2 = findViewById(R.id.activity_music_pager_view_pager);
 
-        mMusics = MusicLab.get(this).getMusics();
+        mMusics = MusicListFragment.newMusics;
         mViewPager2.setAdapter(new MusicSlidePagerAdapter(this));
 
         for (int i = 0; i < mMusics.size(); i++) {

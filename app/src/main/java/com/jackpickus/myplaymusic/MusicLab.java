@@ -2,6 +2,8 @@ package com.jackpickus.myplaymusic;
 
 import android.content.Context;
 
+import com.jackpickus.myplaymusic.models.Music;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -21,8 +23,7 @@ public class MusicLab {
     private MusicLab(Context context) {
         mMusics = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
-            Favorite favorite = new Favorite();
-            Music m = new Music(favorite);
+            Music m = new Music();
             m.setTitle("Song #" + i);
             m.setArtist("Artist #"+ i);
             m.setAlbum("Album #" + i);

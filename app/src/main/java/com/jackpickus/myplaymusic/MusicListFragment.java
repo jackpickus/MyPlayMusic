@@ -1,7 +1,12 @@
 package com.jackpickus.myplaymusic;
 
+import android.content.Context;
 import android.content.Intent;
+
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,16 +14,24 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jackpickus.myplaymusic.models.Music;
+
+import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 public class MusicListFragment extends Fragment {
 
     private RecyclerView mMusicRecyclerView;
     private MusicAdapter mAdapter;
+    private Context mContext;
+    protected static List<Music> newMusics;
 
     @Nullable
     @Override
@@ -36,12 +49,61 @@ public class MusicListFragment extends Fragment {
     private void updateUI() {
         MusicLab musicLab = MusicLab.get(getActivity());
         List<Music> musics = musicLab.getMusics();
+        
+        newMusics = getSongs();
 
-        mAdapter = new MusicAdapter(musics);
+        mAdapter = new MusicAdapter(newMusics);
         mMusicRecyclerView.setAdapter(mAdapter);
     }
 
+    private List<Music> getSongs() {
+        String[] projection = new String[] {
+                MediaStore.Audio.Media._ID,
+                MediaStore.Audio.Media.ARTIST,
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.ALBUM,
+                MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media.DISPLAY_NAME
+        };
 
+        String selection = MediaStore.Audio.Media.IS_MUSIC + "!=0";
+
+        String sortOrder = MediaStore.Audio.Media.TITLE + " ASC";
+
+        List<Music> songs = new ArrayList<>();
+
+        Cursor cursor = mContext.getApplicationContext().getContentResolver().query(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                projection,
+                null,
+                null,
+                sortOrder
+        );
+
+        while (cursor.moveToNext()) {
+            Music m = new Music();
+            m.setAlbum(cursor.getString(3));
+            m.setTitle(cursor.getString(2));
+            m.setArtist(cursor.getString(1));
+//            songs.add(cursor.getString(0) + "||" + cursor.getString(1) + "||" + cursor.getString(2) + "||" + cursor.getString(3) + "||" + cursor.getString(4));
+            songs.add(m);
+        }
+        cursor.close();
+
+        return songs;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext = null;
+    }
 
     private class MusicHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -66,7 +128,6 @@ public class MusicListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-//            Intent intent = MusicActivity.newIntent(getActivity(), mMusic.getId());
             Intent intent = MusicPagerActivity.newIntent(getActivity(), mMusic.getId());
             startActivity(intent);
         }

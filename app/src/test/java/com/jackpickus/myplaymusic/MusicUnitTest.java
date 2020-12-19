@@ -1,5 +1,7 @@
 package com.jackpickus.myplaymusic;
 
+import com.jackpickus.myplaymusic.models.Music;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,12 +10,10 @@ import static org.junit.Assert.*;
 public class MusicUnitTest {
 
     private Music music;
-    private Favorite fav;
 
     @Before
     public void beforeMusicTests() {
-        fav = new Favorite();
-        music = new Music(fav);
+        music = new Music();
         music.setArtist("The Beatles");
         music.setAlbum("Sargent Peppers Lonely Hears Club Band");
         music.setTitle("A Day in a Life");
@@ -33,11 +33,6 @@ public class MusicUnitTest {
     @Test
     public void getArtist() {
         assertEquals(music.getArtist(), "The Beatles");
-    }
-
-    @Test
-    public void songIsFavorited() {
-        assertTrue(music.getFavorited());
     }
 
 }
