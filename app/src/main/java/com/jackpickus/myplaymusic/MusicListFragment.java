@@ -45,8 +45,8 @@ public class MusicListFragment extends Fragment {
     }
 
     private void updateUI() {
-        MusicLab musicLab = MusicLab.get(getActivity());
-        List<Music> musics = musicLab.getMusics();
+//        MusicLab musicLab = MusicLab.get(getActivity());
+//        List<Music> musics = musicLab.getMusics();
 
         newMusics = getSongs();
 
@@ -77,7 +77,8 @@ public class MusicListFragment extends Fragment {
         );
 
         while (cursor.moveToNext()) {
-            Music m = new Music();
+            String data = cursor.getString(4);
+            Music m = new Music(data);
             m.setAlbum(cursor.getString(3));
             m.setTitle(cursor.getString(2));
             m.setArtist(cursor.getString(1));

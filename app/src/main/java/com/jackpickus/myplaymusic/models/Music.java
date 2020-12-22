@@ -8,10 +8,12 @@ public class Music {
     private String artist;
     private String album;
     private Boolean favorite;
+    private String data;
 
-    public Music() {
+    public Music(String data) {
         mId = UUID.randomUUID();
         favorite = false;
+        this.data = data;
     }
 
     public String getTitle() {
@@ -48,5 +50,9 @@ public class Music {
 
     public void setFavorited(Boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public String getData() {
+        return data;
     }
 }
