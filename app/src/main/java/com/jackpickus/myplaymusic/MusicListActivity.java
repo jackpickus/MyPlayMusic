@@ -1,58 +1,50 @@
 package com.jackpickus.myplaymusic;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
+
 import android.os.Bundle;
 
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 public class MusicListActivity extends SingleFragmentActivity {
-    private static final int READ_STORAGE_PERMISSION_REQUEST_CODE = 99;
-    private Context mContext;
+    private static final int READ_STORAGE_PERMISSION_REQUEST_CODE = 0;
 
     @Override
     protected Fragment createFragment() {
+        permission();
         return new MusicListFragment();
     }
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = this.getApplicationContext();
-
-        if (!checkPermissionForReadExtertalStorage()) {
-            int permissionCheck = ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE);
-
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-
-                // OPTIONAL - explain why the app needs this permission
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)) {
-
-                } else {
-                    // ask for permission
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            READ_STORAGE_PERMISSION_REQUEST_CODE);
-                }
-            }
+    private void permission() {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE},
+                    READ_STORAGE_PERMISSION_REQUEST_CODE);
+        } else {
+            Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public boolean checkPermissionForReadExtertalStorage() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int result = mContext.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-            return result == PackageManager.PERMISSION_GRANTED;
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == READ_STORAGE_PERMISSION_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Do whatever you want permission related
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                this.finishAffinity();
+            }
         }
-        return false;
     }
 
 }
