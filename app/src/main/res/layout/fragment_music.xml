@@ -20,6 +20,13 @@
         android:textAlignment="center"
         tools:text="@string/artists" />
 
+    <SeekBar
+        android:id="@+id/song_playing_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="4dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
