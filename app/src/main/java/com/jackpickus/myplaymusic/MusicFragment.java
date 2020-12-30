@@ -162,7 +162,17 @@ public class MusicFragment extends Fragment {
         mLoveImageButton = view.findViewById(R.id.love_image_button);
 
         mFastForwardButton.setOnClickListener(v -> mOnSeekButtonClickListener.onSeekButtonClick(v));
-        mRewindButton.setOnClickListener(v -> mOnSeekButtonClickListener.onSeekButtonClick(v));
+        mRewindButton.setOnClickListener(v -> {
+            //TODO find way to check if user presses button twice in certain time period
+            if (mMediaPlayer.isPlaying() && mMediaPlayer.getCurrentPosition() > 2000) {
+                mMediaPlayer.seekTo(0);
+                mMediaPlayer.start();
+                mSeekBar.setProgress(0);
+            } else {
+                mOnSeekButtonClickListener.onSeekButtonClick(v);
+            }
+        });
+
 
         if (mMusic.getFavorited()) {
             mLoveImageButton.setColorFilter(Color.RED);
