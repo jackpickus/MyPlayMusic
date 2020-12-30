@@ -1,5 +1,6 @@
 package com.jackpickus.myplaymusic;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
@@ -33,11 +34,19 @@ public class MusicFragment extends Fragment {
     private TextView mArtistTextView;
     private ImageButton mLoveImageButton;
     private ImageButton mPlayButton;
+    private ImageButton mRewindButton;
+    private ImageButton mFastForwardButton;
     private MediaPlayer mMediaPlayer;
     private SeekBar mSeekBar;
 
+    private OnSeekButtonClickListener mOnSeekButtonClickListener;
+
     private final Handler mHandler = new Handler();
     private final Runnable updateRunnablePosition = this::updatePosition;
+
+    interface OnSeekButtonClickListener {
+        void onSeekButtonClick(View view);
+    }
 
     public static MusicFragment newInstance(UUID musicId) {
         Bundle args = new Bundle();
@@ -78,8 +87,45 @@ public class MusicFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            mOnSeekButtonClickListener = (OnSeekButtonClickListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Must implement onSeekButtonClickListener");
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+        if (mMediaPlayer == null) {
+            mMediaPlayer = new MediaPlayer();
+
+            mMediaPlayer.setAudioAttributes(
+                    new AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .build()
+            );
+            try {
+                mMediaPlayer.setDataSource(mMusic.getData());
+                mMediaPlayer.prepare();
+                mMediaPlayer.setLooping(false); // prevents song from playing indefinitely
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPlayButton.setImageResource(R.drawable.ic_baseline_play_arrow_24);
+        mSeekBar.setProgress(0);
         mMediaPlayer.stop();
         mMediaPlayer.release();
         mMediaPlayer = null;
@@ -111,7 +157,13 @@ public class MusicFragment extends Fragment {
         mSeekBar.setMax(mMediaPlayer.getDuration());
 
         mPlayButton = view.findViewById(R.id.play_image);
+        mRewindButton = view.findViewById(R.id.rewind_image);
+        mFastForwardButton = view.findViewById(R.id.fastforward_image);
         mLoveImageButton = view.findViewById(R.id.love_image_button);
+
+        mFastForwardButton.setOnClickListener(v -> mOnSeekButtonClickListener.onSeekButtonClick(v));
+        mRewindButton.setOnClickListener(v -> mOnSeekButtonClickListener.onSeekButtonClick(v));
+
         if (mMusic.getFavorited()) {
             mLoveImageButton.setColorFilter(Color.RED);
         }
@@ -133,7 +185,7 @@ public class MusicFragment extends Fragment {
         });
 
         mPlayButton.setOnClickListener(v -> {
-            if(mMediaPlayer.isPlaying()){
+            if (mMediaPlayer.isPlaying()) {
                 mPlayButton.setImageResource(R.drawable.ic_baseline_play_arrow_24);
                 mMediaPlayer.pause();
                 mHandler.removeCallbacks(updateRunnablePosition);
@@ -168,8 +220,8 @@ public class MusicFragment extends Fragment {
 
     private void updatePosition() {
         mHandler.removeCallbacks(updateRunnablePosition);
-        mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
-        mHandler.postDelayed(updateRunnablePosition, 1000);
+        if (mMediaPlayer != null) mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
+        mHandler.postDelayed(updateRunnablePosition, 1500);
     }
 
 }
