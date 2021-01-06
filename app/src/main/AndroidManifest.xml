@@ -23,6 +23,7 @@
         </activity>
         <activity android:name=".MusicActivity" />
         <activity android:name=".MusicPagerActivity" />
+        <activity android:name=".ArtistInfoActivity" />
     </application>
 
 </manifest>

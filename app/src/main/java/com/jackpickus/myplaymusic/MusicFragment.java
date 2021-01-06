@@ -1,6 +1,7 @@
 package com.jackpickus.myplaymusic;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
@@ -10,6 +11,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -146,6 +148,21 @@ public class MusicFragment extends Fragment {
         inflater.inflate(R.menu.fragment_music, menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menu_item_about_song_artist) {
+            Intent intent = ArtistInfoActivity.newIntent(getActivity(), mMusic.getArtist());
+            startActivity(intent);
+        } else if (id == R.id.menu_item_about_song_album) {
+            //TODO start song's album activity
+        } else if (id == R.id.menu_item_music_more_vert) {
+            //TODO display song information
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -163,7 +180,6 @@ public class MusicFragment extends Fragment {
 
         mFastForwardButton.setOnClickListener(v -> mOnSeekButtonClickListener.onSeekButtonClick(v));
         mRewindButton.setOnClickListener(v -> {
-            //TODO find way to check if user presses button twice in certain time period
             if (mMediaPlayer.isPlaying() && mMediaPlayer.getCurrentPosition() > 2000) {
                 mMediaPlayer.seekTo(0);
                 mMediaPlayer.start();
