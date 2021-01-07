@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment;
 import com.jackpickus.myplaymusic.models.Music;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 public class MusicFragment extends Fragment {
@@ -152,7 +153,7 @@ public class MusicFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_item_about_song_artist) {
-            Intent intent = ArtistInfoActivity.newIntent(getActivity(), mMusic.getArtist());
+            Intent intent = ArtistInfoActivity.newIntent(Objects.requireNonNull(getActivity()), mMusic.getArtist());
             startActivity(intent);
         } else if (id == R.id.menu_item_about_song_album) {
             //TODO start song's album activity

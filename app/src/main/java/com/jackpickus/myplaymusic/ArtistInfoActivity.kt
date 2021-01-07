@@ -4,11 +4,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.Fragment
 
-const val EXTRA_ARTIST_INFO:String = "com.pickustechnologies.myplaymusic.artist_id"
+private const val EXTRA_ARTIST_INFO:String = "com.pickustechnologies.myplaymusic.artist_id"
 
 class ArtistInfoActivity : SingleFragmentActivity(){
 
-    override fun createFragment(): Fragment? {
+    override fun createFragment(): Fragment {
         val musicArtist:String = intent.getSerializableExtra(EXTRA_ARTIST_INFO) as String
         return ArtistInfoFragment.newInstance(musicArtist)
     }

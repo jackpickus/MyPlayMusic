@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.jackpickus.myplaymusic.models.Music
 
-const val ARG_ARTIST_ID:String = "music_artist"
+private const val ARG_ARTIST_ID:String = "music_artist"
 
 class ArtistInfoFragment : Fragment() {
     private lateinit var mArtistTextView: TextView
@@ -28,7 +28,8 @@ class ArtistInfoFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mMusicArtist = activity?.intent?.getSerializableExtra(ARG_ARTIST_ID) as String
+        mMusicArtist = (arguments!!.getSerializable(ARG_ARTIST_ID) as String?).toString()
+
         val songsByArtist = ArrayList<Music>()
 
         for (song in MusicListFragment.newMusics) {
