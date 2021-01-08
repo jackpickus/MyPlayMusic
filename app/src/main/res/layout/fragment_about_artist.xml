@@ -21,6 +21,7 @@
         tools:text="Artist Name" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/artists_music_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/artist_title_text_view" />

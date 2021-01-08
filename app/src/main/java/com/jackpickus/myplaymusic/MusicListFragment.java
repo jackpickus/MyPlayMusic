@@ -114,8 +114,8 @@ public class MusicListFragment extends Fragment {
             super(itemView);
             itemView.setOnClickListener(this);
 
-            mTitleTextView = itemView.findViewById(R.id.list_item_music_title_text_view);
-            mArtistTextView = itemView.findViewById(R.id.list_item_music_artist_text_view);
+            mTitleTextView = itemView.findViewById(R.id.list_item_primary_text_view);
+            mArtistTextView = itemView.findViewById(R.id.list_item_secondary_text_view);
         }
 
         public void bindMusic(Music music) {
