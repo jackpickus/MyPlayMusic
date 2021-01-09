@@ -71,22 +71,30 @@ public class MusicFragment extends Fragment {
         mMusic = findMusicId(musicId);
 
         if (mMediaPlayer == null) {
-            mMediaPlayer = new MediaPlayer();
+            mMediaPlayer = createMediaPlayer();
         }
-        mMediaPlayer.setAudioAttributes(
+
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private MediaPlayer createMediaPlayer() {
+        MediaPlayer player = new MediaPlayer();
+        player.setAudioAttributes(
                 new AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                         .setUsage(AudioAttributes.USAGE_MEDIA)
                         .build()
         );
         try {
-            mMediaPlayer.setDataSource(mMusic.getData());
-            mMediaPlayer.prepare();
-            mMediaPlayer.setLooping(false); // prevents song from playing indefinitely
+            player.setDataSource(mMusic.getData());
+            player.prepare();
+            player.setLooping(false); // prevents song from playing indefinitely
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        return player;
     }
 
     @Override
@@ -104,23 +112,8 @@ public class MusicFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-
         if (mMediaPlayer == null) {
-            mMediaPlayer = new MediaPlayer();
-
-            mMediaPlayer.setAudioAttributes(
-                    new AudioAttributes.Builder()
-                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                            .setUsage(AudioAttributes.USAGE_MEDIA)
-                            .build()
-            );
-            try {
-                mMediaPlayer.setDataSource(mMusic.getData());
-                mMediaPlayer.prepare();
-                mMediaPlayer.setLooping(false); // prevents song from playing indefinitely
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            mMediaPlayer = createMediaPlayer();
         }
     }
 

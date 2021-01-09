@@ -61,6 +61,7 @@ class ArtistInfoFragment : Fragment() {
     }
 
     private fun songClicked(song: Music) {
+        // TODO create music fragment and play it
         Toast.makeText(this.context, "Clicked: ${song.title}", Toast.LENGTH_SHORT).show()
     }
 
@@ -88,6 +89,7 @@ class ArtistInfoFragment : Fragment() {
             }
 
             fun bindMusic(song: Music) {
+                currentSong = song
                 mTitleTextView.text = song.title
                 mAlbumTextView.text = song.album
             }
