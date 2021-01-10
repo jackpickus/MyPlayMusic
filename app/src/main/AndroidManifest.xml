@@ -13,15 +13,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyPlayMusic">
-        <activity android:name=".MusicListActivity">
+        <activity android:name=".activities.MusicListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MusicActivity" />
-        <activity android:name=".MusicPagerActivity" />
-        <activity android:name=".ArtistInfoActivity" />
+        <activity android:name=".activities.MusicActivity" />
+        <activity android:name=".activities.MusicPagerActivity" />
+        <activity android:name=".activities.ArtistInfoActivity" />
     </application>
 
 </manifest>

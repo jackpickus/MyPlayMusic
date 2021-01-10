@@ -1,4 +1,4 @@
-package com.jackpickus.myplaymusic;
+package com.jackpickus.myplaymusic.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,9 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.jackpickus.myplaymusic.fragments.MusicListFragment;
+import com.jackpickus.myplaymusic.R;
+import com.jackpickus.myplaymusic.fragments.MusicFragment;
 import com.jackpickus.myplaymusic.models.Music;
 
 import java.util.List;

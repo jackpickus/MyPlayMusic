@@ -1,4 +1,4 @@
-package com.jackpickus.myplaymusic;
+package com.jackpickus.myplaymusic.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jackpickus.myplaymusic.R;
+import com.jackpickus.myplaymusic.activities.MusicPagerActivity;
 import com.jackpickus.myplaymusic.models.Music;
 
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ public class MusicListFragment extends Fragment {
     private RecyclerView mMusicRecyclerView;
     private MusicAdapter mAdapter;
     private Context mContext;
-    protected static List<Music> newMusics;
+    public static List<Music> newMusics;
 
     @Nullable
     @Override

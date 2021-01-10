@@ -1,8 +1,9 @@
-package com.jackpickus.myplaymusic
+package com.jackpickus.myplaymusic.activities
 
 import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.Fragment
+import com.jackpickus.myplaymusic.fragments.ArtistInfoFragment
 
 private const val EXTRA_ARTIST_INFO:String = "com.pickustechnologies.myplaymusic.artist_id"
 

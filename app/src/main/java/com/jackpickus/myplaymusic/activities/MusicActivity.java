@@ -1,9 +1,11 @@
-package com.jackpickus.myplaymusic;
+package com.jackpickus.myplaymusic.activities;
 
 import android.content.Context;
 import android.content.Intent;
 
 import androidx.fragment.app.Fragment;
+
+import com.jackpickus.myplaymusic.fragments.MusicFragment;
 
 import java.util.UUID;
 

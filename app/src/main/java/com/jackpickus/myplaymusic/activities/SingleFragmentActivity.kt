@@ -1,8 +1,9 @@
-package com.jackpickus.myplaymusic
+package com.jackpickus.myplaymusic.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.jackpickus.myplaymusic.R
 
 abstract class SingleFragmentActivity : AppCompatActivity() {
     protected abstract fun createFragment(): Fragment?

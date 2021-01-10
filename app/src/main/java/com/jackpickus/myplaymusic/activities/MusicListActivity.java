@@ -1,4 +1,4 @@
-package com.jackpickus.myplaymusic;
+package com.jackpickus.myplaymusic.activities;
 
 import android.content.pm.PackageManager;
 import android.widget.Toast;
@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import com.jackpickus.myplaymusic.fragments.MusicListFragment;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 

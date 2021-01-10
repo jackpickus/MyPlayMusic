@@ -1,4 +1,4 @@
-package com.jackpickus.myplaymusic
+package com.jackpickus.myplaymusic.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.jackpickus.myplaymusic.R
 import com.jackpickus.myplaymusic.models.Music
 
 private const val ARG_ARTIST_ID:String = "music_artist"

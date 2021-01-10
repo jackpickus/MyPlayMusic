@@ -1,4 +1,4 @@
-package com.jackpickus.myplaymusic;
+package com.jackpickus.myplaymusic.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +24,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.jackpickus.myplaymusic.R;
+import com.jackpickus.myplaymusic.activities.ArtistInfoActivity;
 import com.jackpickus.myplaymusic.models.Music;
 
 import java.io.IOException;
@@ -48,7 +50,7 @@ public class MusicFragment extends Fragment {
     private final Handler mHandler = new Handler();
     private final Runnable updateRunnablePosition = this::updatePosition;
 
-    interface OnSeekButtonClickListener {
+    public interface OnSeekButtonClickListener {
         void onSeekButtonClick(View view);
     }
 
