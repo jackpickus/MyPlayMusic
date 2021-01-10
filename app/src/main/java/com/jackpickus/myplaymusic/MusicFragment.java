@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -93,6 +94,11 @@ public class MusicFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // TODO implement feature to advance to next song after current song finishes
+        player.setOnCompletionListener(mp -> {
+            Toast.makeText(this.getActivity(), "Song is complete", Toast.LENGTH_SHORT).show();
+        });
 
         return player;
     }

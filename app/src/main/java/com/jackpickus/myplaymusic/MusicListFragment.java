@@ -40,6 +40,7 @@ public class MusicListFragment extends Fragment {
         mMusicRecyclerView = view.findViewById(R.id.music_recycler_view);
         mMusicRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        // TODO update UI with songs after permissions are granted
         if (ContextCompat.checkSelfPermission(mContext.getApplicationContext(), WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
             updateUI();
