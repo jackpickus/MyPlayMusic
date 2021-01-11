@@ -129,7 +129,9 @@ public class MusicListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Intent intent = MusicPagerActivity.newIntent(getActivity(), mMusic.getId());
+            // this will fail if there is an artists who's name is just a ";"
+            // it will create a pager activity of only songs by ";" (kind of a hack)
+            Intent intent = MusicPagerActivity.newIntent(getActivity(), mMusic.getId(), ";");
             startActivity(intent);
         }
 

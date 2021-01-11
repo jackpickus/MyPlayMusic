@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jackpickus.myplaymusic.R
+import com.jackpickus.myplaymusic.activities.MusicPagerActivity
 import com.jackpickus.myplaymusic.models.Music
 
 private const val ARG_ARTIST_ID:String = "music_artist"
@@ -62,8 +62,8 @@ class ArtistInfoFragment : Fragment() {
     }
 
     private fun songClicked(song: Music) {
-        // TODO create music fragment and play it
-        Toast.makeText(this.context, "Clicked: ${song.title}", Toast.LENGTH_SHORT).show()
+        val intent = MusicPagerActivity.newIntent(this.activity, song.id, song.artist);
+        startActivity(intent)
     }
 
     class ArtistMusicAdapter(private val musicDataSet: ArrayList<Music>, private val onClick: (Music) -> Unit) :
