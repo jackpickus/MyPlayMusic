@@ -42,6 +42,7 @@ public class MusicFragment extends Fragment {
     private ImageButton mPlayButton;
     private ImageButton mRewindButton;
     private ImageButton mFastForwardButton;
+    private ImageButton mShuffleImageButton;
     private MediaPlayer mMediaPlayer;
     private SeekBar mSeekBar;
 
@@ -179,6 +180,7 @@ public class MusicFragment extends Fragment {
         mRewindButton = view.findViewById(R.id.rewind_image);
         mFastForwardButton = view.findViewById(R.id.fastforward_image);
         mLoveImageButton = view.findViewById(R.id.love_image_button);
+        mShuffleImageButton = view.findViewById(R.id.image_button_shuffle_button);
 
         mFastForwardButton.setOnClickListener(v -> mOnSeekButtonClickListener.onSeekButtonClick(v));
         mRewindButton.setOnClickListener(v -> {
@@ -206,10 +208,28 @@ public class MusicFragment extends Fragment {
                 mLoveImageButton.setColorFilter(Color.RED);
                 mMusic.setFavorited(true);
             } else {
-                mLoveImageButton.setColorFilter(Color.argb(255, 52, 52, 52));
+                mLoveImageButton.setColorFilter(Color.argb(255, 52, 52, 52)); // very dark grey
                 mMusic.setFavorited(false);
             }
 
+        });
+
+        if (MusicListFragment.shuffle) {
+            mShuffleImageButton.setColorFilter(Color.argb(255, 255, 140, 0)); // dark orange
+            mShuffleImageButton.setSelected(true);
+        }
+
+        mShuffleImageButton.setOnClickListener(v -> {
+            mShuffleImageButton.setSelected(!mShuffleImageButton.isSelected());
+
+            if (mShuffleImageButton.isSelected()) {
+                mShuffleImageButton.setColorFilter(Color.argb(255, 255, 140, 0)); // dark orange
+                MusicListFragment.shuffle = true;
+                //TODO implement shuffle method
+            } else {
+                mShuffleImageButton.setColorFilter(Color.argb(255, 52, 52, 52)); // very dark grey
+                MusicListFragment.shuffle = false;
+            }
         });
 
         mPlayButton.setOnClickListener(v -> {

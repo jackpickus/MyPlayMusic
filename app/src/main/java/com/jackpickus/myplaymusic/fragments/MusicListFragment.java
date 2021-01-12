@@ -33,6 +33,7 @@ public class MusicListFragment extends Fragment {
     private MusicAdapter mAdapter;
     private Context mContext;
     public static List<Music> newMusics;
+    public static boolean shuffle;
 
     @Nullable
     @Override
@@ -41,6 +42,8 @@ public class MusicListFragment extends Fragment {
 
         mMusicRecyclerView = view.findViewById(R.id.music_recycler_view);
         mMusicRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        shuffle = false;
 
         // TODO update UI with songs after permissions are granted
         if (ContextCompat.checkSelfPermission(mContext.getApplicationContext(), WRITE_EXTERNAL_STORAGE)
