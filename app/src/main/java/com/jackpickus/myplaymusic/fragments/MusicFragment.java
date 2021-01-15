@@ -124,6 +124,15 @@ public class MusicFragment extends Fragment {
         if (mMediaPlayer == null) {
             mMediaPlayer = createMediaPlayer();
         }
+
+        if (MusicListFragment.shuffle) {
+            mShuffleImageButton.setColorFilter(Color.argb(255, 255, 140, 0)); // dark orange
+            mShuffleImageButton.setSelected(true);
+        } else {
+            mShuffleImageButton.setColorFilter(Color.argb(255, 52, 52, 52)); // very dark grey
+            mShuffleImageButton.setSelected(false);
+        }
+
     }
 
     @Override
