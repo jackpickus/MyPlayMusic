@@ -8,7 +8,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.jackpickus.myplaymusic.fragments.MusicListFragment;
+import com.jackpickus.myplaymusic.fragments.MainPagerFragment;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -18,7 +18,8 @@ public class MusicListActivity extends SingleFragmentActivity {
     @Override
     protected Fragment createFragment() {
         permission();
-        return new MusicListFragment();
+//        return new MusicListFragment();
+        return new MainPagerFragment();
     }
 
     private void permission() {
