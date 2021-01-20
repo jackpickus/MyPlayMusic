@@ -12,7 +12,7 @@ import com.jackpickus.myplaymusic.R
 import com.jackpickus.myplaymusic.adapters.MusicCollectionAdapter
 
 class MainPagerFragment : Fragment() {
-    private lateinit var demoCollectionAdapter: MusicCollectionAdapter
+    private lateinit var musicCollectionAdapter: MusicCollectionAdapter
     private lateinit var viewPager: ViewPager2
 
     override fun onCreateView(
@@ -24,9 +24,9 @@ class MainPagerFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        demoCollectionAdapter = MusicCollectionAdapter(this)
+        musicCollectionAdapter = MusicCollectionAdapter(this)
         viewPager = view.findViewById(R.id.fragment_main_pager)
-        viewPager.adapter = demoCollectionAdapter
+        viewPager.adapter = musicCollectionAdapter
 
         val tabLayout = view.findViewById(R.id.tab_layout) as TabLayout
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
@@ -38,6 +38,7 @@ class MainPagerFragment : Fragment() {
                 else -> tab.text = "SONGS"
             }
         }.attach()
+        viewPager.currentItem = musicCollectionAdapter.getItemId(2).toInt()
 
     }
 }
