@@ -55,7 +55,8 @@ public class MusicPagerActivity extends AppCompatActivity implements MusicFragme
 
         otherMusicQueue = new ArrayList<>();
 
-        // means user is not in music list fragment (the entire lib of music)
+        // if this is true, means user is not in music list fragment (the entire lib of music)
+        // they are in the artist fragment or album one
         if (!artist.equals(";")) {
             for (Music m : mMusics) {
                 if (m.getArtist().equals(artist)) {
