@@ -14,4 +14,9 @@
     <string name="actions">Song Actions</string>
     <string name="love_image_button">love song image button</string>
     <string name="shuffle_button_description">shuffle music</string>
+    <string name="notification_title">MyPlayMusic Notification</string>
+    <string name="notification_message">MusicPlayerService is running</string>
+    <string name="ticker_text">MyPlayMusic Service is running</string>
+    <string name="channel_name">My notification channel</string>
+    <string name="channel_description">the notification channel for playing a song</string>
 </resources>

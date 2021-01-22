@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jackpickus.myplaymusic">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
     <!-- Used to read mediastore db -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
@@ -19,9 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MusicActivity" />
+        <activity
+            android:name=".activities.MusicActivity"
+            android:parentActivityName=".activities.MusicListActivity" />
         <activity android:name=".activities.MusicPagerActivity" />
         <activity android:name=".activities.ArtistInfoActivity" />
+        <service android:name=".services.MusicPlayerService" />
     </application>
 
 </manifest>
