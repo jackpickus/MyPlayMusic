@@ -19,4 +19,5 @@
     <string name="ticker_text">MyPlayMusic Service is running</string>
     <string name="channel_name">My notification channel</string>
     <string name="channel_description">the notification channel for playing a song</string>
+    <string name="album_art">album art</string>
 </resources>

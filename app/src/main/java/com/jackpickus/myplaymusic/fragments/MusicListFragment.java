@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackpickus.myplaymusic.R;
-import com.jackpickus.myplaymusic.activities.MusicPagerActivity;
+import com.jackpickus.myplaymusic.activities.MusicActivity;
 import com.jackpickus.myplaymusic.models.Music;
 
 import java.util.ArrayList;
@@ -137,7 +137,7 @@ public class MusicListFragment extends Fragment {
             // the reason behind this is so that I can reuse MusicPagerActivity to make
             // pagers for not just the main lib, but pager for a specific artist or album
             // the ; is to represent that the user is in the main lib
-            Intent intent = MusicPagerActivity.newIntent(getActivity(), mMusic.getId(), ";");
+            Intent intent = MusicActivity.newIntent(getActivity(), mMusic.getId());
             startActivity(intent);
         }
 

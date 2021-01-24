@@ -25,9 +25,12 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.jackpickus.myplaymusic.R;
 import com.jackpickus.myplaymusic.activities.ArtistInfoActivity;
+import com.jackpickus.myplaymusic.adapters.AlbumPagerAdapter;
 import com.jackpickus.myplaymusic.models.Music;
 import com.jackpickus.myplaymusic.services.MusicPlayerService;
 
@@ -49,6 +52,10 @@ public class MusicFragment extends Fragment {
     private ImageButton mShuffleImageButton;
     //    private MediaPlayer mMediaPlayer;
     private SeekBar mSeekBar;
+
+    // Pager and Adapter for Album Art
+    private ViewPager2 mAlbumArtViewPager;
+    private FragmentStateAdapter pagerAdapter;
 
     MusicPlayerService mMusicPlayerService;
     boolean mBound = false;
@@ -162,11 +169,11 @@ public class MusicFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        try {
-            mOnSeekButtonClickListener = (OnSeekButtonClickListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Must implement onSeekButtonClickListener");
-        }
+//        try {
+//            mOnSeekButtonClickListener = (OnSeekButtonClickListener) context;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException("Must implement onSeekButtonClickListener");
+//        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -232,6 +239,12 @@ public class MusicFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_music, container, false);
+
+        mAlbumArtViewPager = view.findViewById(R.id.album_art_view_pager);
+        pagerAdapter = new AlbumPagerAdapter(this.getActivity());
+        mAlbumArtViewPager.setAdapter(pagerAdapter);
+
+
         mSongTitleTextView = view.findViewById(R.id.song_title);
         mArtistTextView = view.findViewById(R.id.artist);
 
@@ -244,7 +257,7 @@ public class MusicFragment extends Fragment {
         mLoveImageButton = view.findViewById(R.id.love_image_button);
         mShuffleImageButton = view.findViewById(R.id.image_button_shuffle_button);
 
-        mFastForwardButton.setOnClickListener(v -> mOnSeekButtonClickListener.onSeekButtonClick(v));
+//        mFastForwardButton.setOnClickListener(v -> mOnSeekButtonClickListener.onSeekButtonClick(v));
 //        mRewindButton.setOnClickListener(v -> {
 //            if (mMediaPlayer.isPlaying() && mMediaPlayer.getCurrentPosition() > 2000) {
 //                mMediaPlayer.seekTo(0);
