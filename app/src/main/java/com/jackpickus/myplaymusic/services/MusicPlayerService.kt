@@ -30,7 +30,6 @@ class MusicPlayerService : Service() {
         fun getService(): MusicPlayerService = this@MusicPlayerService
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate() {
         super.onCreate()
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
@@ -111,6 +110,7 @@ class MusicPlayerService : Service() {
     private fun initMediaPlayer(song: Music?) {
 
         val songUri: Uri = Uri.parse(song?.data)
+        mMediaPlayer?.reset()
         mMediaPlayer = MediaPlayer().apply {
             setAudioAttributes(
                     AudioAttributes.Builder()

@@ -1,13 +1,15 @@
 package com.jackpickus.myplaymusic.fragments;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
-import android.media.AudioAttributes;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,23 +19,25 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.jackpickus.myplaymusic.R;
 import com.jackpickus.myplaymusic.activities.ArtistInfoActivity;
 import com.jackpickus.myplaymusic.models.Music;
+import com.jackpickus.myplaymusic.services.MusicPlayerService;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
 public class MusicFragment extends Fragment {
     private static final String ARG_MUSIC_ID = "music_id";
+    private static final String ARG_SONG_ID = "song_id";
+    private static final String TAG = "MusicFragment";
 
     private Music mMusic;
     private TextView mSongTitleTextView;
@@ -43,13 +47,16 @@ public class MusicFragment extends Fragment {
     private ImageButton mRewindButton;
     private ImageButton mFastForwardButton;
     private ImageButton mShuffleImageButton;
-    private MediaPlayer mMediaPlayer;
+    //    private MediaPlayer mMediaPlayer;
     private SeekBar mSeekBar;
+
+    MusicPlayerService mMusicPlayerService;
+    boolean mBound = false;
 
     private OnSeekButtonClickListener mOnSeekButtonClickListener;
 
-    private final Handler mHandler = new Handler();
-    private final Runnable updateRunnablePosition = this::updatePosition;
+//    private final Handler mHandler = new Handler();
+//    private final Runnable updateRunnablePosition = this::updatePosition;
 
     public interface OnSeekButtonClickListener {
         void onSeekButtonClick(View view);
@@ -74,14 +81,14 @@ public class MusicFragment extends Fragment {
 
         mMusic = findMusicId(musicId);
 
-        if (mMediaPlayer == null) {
-            mMediaPlayer = createMediaPlayer();
-        }
+//        if (mMediaPlayer == null) {
+//            mMediaPlayer = createMediaPlayer();
+//        }
 
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+/*    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private MediaPlayer createMediaPlayer() {
         MediaPlayer player = new MediaPlayer();
         player.setAudioAttributes(
@@ -104,6 +111,52 @@ public class MusicFragment extends Fragment {
         });
 
         return player;
+    }*/
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Intent serviceIntent = new Intent(this.getContext(), MusicPlayerService.class);
+//        if (!isMyServiceRunning(MusicPlayerService.class, this.getActivity())) {
+//            if (mMusicPlayerService != null) {
+//                mMusicPlayerService.stopService(new Intent(this.getActivity(), MusicPlayerService.class));
+//            }
+//
+//            serviceIntent.putExtra(ARG_SONG_ID, mMusic.getId());
+//            Objects.requireNonNull(this.getContext()).startService(serviceIntent); // start MusicPlayerService
+//            Log.i(TAG, "MusicPlayerService call made.");
+//        }
+
+        if (mMusicPlayerService != null) {
+            mMusicPlayerService.stopService(new Intent(this.getActivity(), MusicPlayerService.class));
+        }
+
+        serviceIntent.putExtra(ARG_SONG_ID, mMusic.getId());
+        Objects.requireNonNull(this.getContext()).startService(serviceIntent); // start MusicPlayerService
+        Log.i(TAG, "MusicPlayerService call made.");
+
+        this.getContext().bindService(serviceIntent, connection, Context.BIND_IMPORTANT);
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass, FragmentActivity activity) {
+        ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+        assert manager != null;
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop() called");
+        Objects.requireNonNull(this.getContext()).unbindService(connection);
+        mBound = false;
     }
 
     @Override
@@ -121,9 +174,9 @@ public class MusicFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        if (mMediaPlayer == null) {
-            mMediaPlayer = createMediaPlayer();
-        }
+//        if (mMediaPlayer == null) {
+//            mMediaPlayer = createMediaPlayer();
+//        }
 
         if (MusicListFragment.shuffle) {
             mShuffleImageButton.setColorFilter(Color.argb(255, 255, 140, 0)); // dark orange
@@ -139,10 +192,10 @@ public class MusicFragment extends Fragment {
     public void onPause() {
         super.onPause();
         mPlayButton.setImageResource(R.drawable.ic_baseline_play_arrow_24);
-        mSeekBar.setProgress(0);
-        mMediaPlayer.stop();
-        mMediaPlayer.release();
-        mMediaPlayer = null;
+//        mSeekBar.setProgress(0);
+//        mMediaPlayer.stop();
+//        mMediaPlayer.release();
+//        mMediaPlayer = null;
     }
 
     private Music findMusicId(UUID id) {
@@ -183,7 +236,7 @@ public class MusicFragment extends Fragment {
         mArtistTextView = view.findViewById(R.id.artist);
 
         mSeekBar = view.findViewById(R.id.song_playing_time);
-        mSeekBar.setMax(mMediaPlayer.getDuration());
+//        mSeekBar.setMax(mMediaPlayer.getDuration());
 
         mPlayButton = view.findViewById(R.id.play_image);
         mRewindButton = view.findViewById(R.id.rewind_image);
@@ -192,15 +245,15 @@ public class MusicFragment extends Fragment {
         mShuffleImageButton = view.findViewById(R.id.image_button_shuffle_button);
 
         mFastForwardButton.setOnClickListener(v -> mOnSeekButtonClickListener.onSeekButtonClick(v));
-        mRewindButton.setOnClickListener(v -> {
-            if (mMediaPlayer.isPlaying() && mMediaPlayer.getCurrentPosition() > 2000) {
-                mMediaPlayer.seekTo(0);
-                mMediaPlayer.start();
-                mSeekBar.setProgress(0);
-            } else {
-                mOnSeekButtonClickListener.onSeekButtonClick(v);
-            }
-        });
+//        mRewindButton.setOnClickListener(v -> {
+//            if (mMediaPlayer.isPlaying() && mMediaPlayer.getCurrentPosition() > 2000) {
+//                mMediaPlayer.seekTo(0);
+//                mMediaPlayer.start();
+//                mSeekBar.setProgress(0);
+//            } else {
+//                mOnSeekButtonClickListener.onSeekButtonClick(v);
+//            }
+//        });
 
 
         if (mMusic.getFavorited()) {
@@ -242,43 +295,71 @@ public class MusicFragment extends Fragment {
         });
 
         mPlayButton.setOnClickListener(v -> {
-            if (mMediaPlayer.isPlaying()) {
-                mPlayButton.setImageResource(R.drawable.ic_baseline_play_arrow_24);
-                mMediaPlayer.pause();
-                mHandler.removeCallbacks(updateRunnablePosition);
-            } else {
-                mPlayButton.setImageResource(R.drawable.ic_baseline_pause_24);
-                mMediaPlayer.start();
-                updatePosition();
-            }
-        });
 
-        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            if (mBound) {
+                if (mMusicPlayerService.isMediaPlaying()) {
+                    mPlayButton.setImageResource(R.drawable.ic_baseline_play_arrow_24);
+                    mMusicPlayerService.pause();
 
-            }
+                } else {
+                    mPlayButton.setImageResource(R.drawable.ic_baseline_pause_24);
+                    mMusicPlayerService.play();
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                if (mMediaPlayer != null) {
-                    mMediaPlayer.seekTo(seekBar.getProgress());
                 }
             }
+
+//            if (mMediaPlayer.isPlaying()) {
+//                mPlayButton.setImageResource(R.drawable.ic_baseline_play_arrow_24);
+//                mMediaPlayer.pause();
+//                mHandler.removeCallbacks(updateRunnablePosition);
+//            } else {
+//                mPlayButton.setImageResource(R.drawable.ic_baseline_pause_24);
+//                mMediaPlayer.start();
+//                updatePosition();
+//            }
         });
+
+//        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//
+//            }
+//
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//
+//            }
+//
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//                if (mMediaPlayer != null) {
+//                    mMediaPlayer.seekTo(seekBar.getProgress());
+//                }
+//            }
+//        });
 
         return view;
     }
 
-    private void updatePosition() {
-        mHandler.removeCallbacks(updateRunnablePosition);
-        if (mMediaPlayer != null) mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
-        mHandler.postDelayed(updateRunnablePosition, 1500);
-    }
+//    private void updatePosition() {
+//        mHandler.removeCallbacks(updateRunnablePosition);
+//        if (mMediaPlayer != null) mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
+//        mHandler.postDelayed(updateRunnablePosition, 1500);
+//    }
+
+
+    private final ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MusicPlayerService.LocalBinder localBinder = (MusicPlayerService.LocalBinder) service;
+            mMusicPlayerService = localBinder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
 
 }
