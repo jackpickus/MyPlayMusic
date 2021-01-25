@@ -7,10 +7,27 @@
 
     <path
         android:fillColor="@color/very_dark_grey"
-        android:pathData="M 25,0 L 25,100 0,100 z" />
+        android:pathData="M 40,0 L 40,85 35,85 35,0 z" />
 
     <path
         android:fillColor="@color/very_dark_grey"
-        android:pathData="M 50,0 L 50,100 25,100 z" />
+        android:pathData="M20,85
+        A10,10 0 2,2 40,85
+        A10,10 0 2,2 20,85 Z" />
+
+    <path
+        android:fillColor="@color/very_dark_grey"
+        android:pathData="M 85,0 L 85,75 80,75 80,0 z" />
+
+
+    <path
+        android:fillColor="@color/very_dark_grey"
+        android:pathData="M85,75
+        A10,10 0 2,2 65,75
+        A10,10 0 2,2 85,75 Z" />
+
+    <path
+        android:fillColor="@color/very_dark_grey"
+        android:pathData="M 35,0 L 35,5 85,5 85,0 z" />
 
 </vector>
