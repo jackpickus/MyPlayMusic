@@ -50,7 +50,6 @@ public class MusicFragment extends Fragment {
     private ImageButton mRewindButton;
     private ImageButton mFastForwardButton;
     private ImageButton mShuffleImageButton;
-    //    private MediaPlayer mMediaPlayer;
     private SeekBar mSeekBar;
 
     // Pager and Adapter for Album Art
@@ -60,14 +59,8 @@ public class MusicFragment extends Fragment {
     MusicPlayerService mMusicPlayerService;
     boolean mBound = false;
 
-    private OnSeekButtonClickListener mOnSeekButtonClickListener;
-
 //    private final Handler mHandler = new Handler();
 //    private final Runnable updateRunnablePosition = this::updatePosition;
-
-    public interface OnSeekButtonClickListener {
-        void onSeekButtonClick(View view);
-    }
 
     public static MusicFragment newInstance(UUID musicId) {
         Bundle args = new Bundle();
@@ -88,37 +81,7 @@ public class MusicFragment extends Fragment {
 
         mMusic = findMusicId(musicId);
 
-//        if (mMediaPlayer == null) {
-//            mMediaPlayer = createMediaPlayer();
-//        }
-
-
     }
-
-/*    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private MediaPlayer createMediaPlayer() {
-        MediaPlayer player = new MediaPlayer();
-        player.setAudioAttributes(
-                new AudioAttributes.Builder()
-                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                        .setUsage(AudioAttributes.USAGE_MEDIA)
-                        .build()
-        );
-        try {
-            player.setDataSource(mMusic.getData());
-            player.prepare();
-            player.setLooping(false); // prevents song from playing indefinitely
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // TODO implement feature to advance to next song after current song finishes
-        player.setOnCompletionListener(mp -> {
-            Toast.makeText(this.getActivity(), "Song is complete", Toast.LENGTH_SHORT).show();
-        });
-
-        return player;
-    }*/
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -126,25 +89,22 @@ public class MusicFragment extends Fragment {
         super.onStart();
 
         Intent serviceIntent = new Intent(this.getContext(), MusicPlayerService.class);
-//        if (!isMyServiceRunning(MusicPlayerService.class, this.getActivity())) {
-//            if (mMusicPlayerService != null) {
-//                mMusicPlayerService.stopService(new Intent(this.getActivity(), MusicPlayerService.class));
-//            }
-//
-//            serviceIntent.putExtra(ARG_SONG_ID, mMusic.getId());
-//            Objects.requireNonNull(this.getContext()).startService(serviceIntent); // start MusicPlayerService
-//            Log.i(TAG, "MusicPlayerService call made.");
-//        }
 
         if (mMusicPlayerService != null) {
-            mMusicPlayerService.stopService(new Intent(this.getActivity(), MusicPlayerService.class));
+
+            if (mMusicPlayerService.getId().compareTo(mMusic.getId()) != 0) {
+                mMusicPlayerService.stopService(new Intent(this.getActivity(), MusicPlayerService.class));
+                serviceIntent.putExtra(ARG_SONG_ID, mMusic.getId());
+                Objects.requireNonNull(this.getContext()).startService(serviceIntent); // start MusicPlayerService
+                Log.i(TAG, "MusicPlayerService call made.");
+            }
+        } else {
+            serviceIntent.putExtra(ARG_SONG_ID, mMusic.getId());
+            Objects.requireNonNull(this.getContext()).startService(serviceIntent); // start MusicPlayerService
+            Log.i(TAG, "MusicPlayerService call made.");
         }
 
-        serviceIntent.putExtra(ARG_SONG_ID, mMusic.getId());
-        Objects.requireNonNull(this.getContext()).startService(serviceIntent); // start MusicPlayerService
-        Log.i(TAG, "MusicPlayerService call made.");
-
-        this.getContext().bindService(serviceIntent, connection, Context.BIND_IMPORTANT);
+        Objects.requireNonNull(this.getContext()).bindService(serviceIntent, connection, Context.BIND_IMPORTANT);
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass, FragmentActivity activity) {
@@ -164,26 +124,28 @@ public class MusicFragment extends Fragment {
         Log.d(TAG, "onStop() called");
         Objects.requireNonNull(this.getContext()).unbindService(connection);
         mBound = false;
-    }
+        mAlbumArtViewPager.unregisterOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-//        try {
-//            mOnSeekButtonClickListener = (OnSeekButtonClickListener) context;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException("Must implement onSeekButtonClickListener");
-//        }
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onResume() {
         super.onResume();
-
-//        if (mMediaPlayer == null) {
-//            mMediaPlayer = createMediaPlayer();
-//        }
 
         if (MusicListFragment.shuffle) {
             mShuffleImageButton.setColorFilter(Color.argb(255, 255, 140, 0)); // dark orange
@@ -198,11 +160,7 @@ public class MusicFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        mPlayButton.setImageResource(R.drawable.ic_baseline_play_arrow_24);
 //        mSeekBar.setProgress(0);
-//        mMediaPlayer.stop();
-//        mMediaPlayer.release();
-//        mMediaPlayer = null;
     }
 
     private Music findMusicId(UUID id) {
@@ -244,6 +202,24 @@ public class MusicFragment extends Fragment {
         pagerAdapter = new AlbumPagerAdapter(this.getActivity());
         mAlbumArtViewPager.setAdapter(pagerAdapter);
 
+        mAlbumArtViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                Log.d(TAG, "onPageSelected() called with position " + position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+            }
+        });
+
 
         mSongTitleTextView = view.findViewById(R.id.song_title);
         mArtistTextView = view.findViewById(R.id.artist);
@@ -252,21 +228,38 @@ public class MusicFragment extends Fragment {
 //        mSeekBar.setMax(mMediaPlayer.getDuration());
 
         mPlayButton = view.findViewById(R.id.play_image);
+        mPlayButton.setImageResource(R.drawable.ic_baseline_pause_24);
         mRewindButton = view.findViewById(R.id.rewind_image);
         mFastForwardButton = view.findViewById(R.id.fastforward_image);
         mLoveImageButton = view.findViewById(R.id.love_image_button);
         mShuffleImageButton = view.findViewById(R.id.image_button_shuffle_button);
 
-//        mFastForwardButton.setOnClickListener(v -> mOnSeekButtonClickListener.onSeekButtonClick(v));
-//        mRewindButton.setOnClickListener(v -> {
-//            if (mMediaPlayer.isPlaying() && mMediaPlayer.getCurrentPosition() > 2000) {
-//                mMediaPlayer.seekTo(0);
-//                mMediaPlayer.start();
+        mFastForwardButton.setOnClickListener(v -> {
+            int currentPosition = mAlbumArtViewPager.getCurrentItem();
+
+            if (!(currentPosition >= (MusicListFragment.newMusics.size() - 1))) {
+                mAlbumArtViewPager.setCurrentItem(currentPosition + 1);
+            }
+            //TODO implement fastforward to next song
+//             mMusicPlayerService.fastForward();
+        });
+
+        mRewindButton.setOnClickListener(v -> {
+            //TODO implement rewind button
+//            if (mMusicPlayerService.isMediaPlaying() && mMusicPlayerService.getCurrentPosition() > 2000) {
+//                mMusicPlayerService.seekTo(0);
+//                mMusicPlayerService.play();
 //                mSeekBar.setProgress(0);
 //            } else {
 //                mOnSeekButtonClickListener.onSeekButtonClick(v);
 //            }
-//        });
+
+            int currentPosition = mAlbumArtViewPager.getCurrentItem();
+            if (!(currentPosition <= 0)) {
+                mAlbumArtViewPager.setCurrentItem(currentPosition - 1);
+            }
+
+        });
 
 
         if (mMusic.getFavorited()) {
@@ -313,25 +306,18 @@ public class MusicFragment extends Fragment {
                 if (mMusicPlayerService.isMediaPlaying()) {
                     mPlayButton.setImageResource(R.drawable.ic_baseline_play_arrow_24);
                     mMusicPlayerService.pause();
-
+                    //TODO implement seekbar
+//                    mHandler.removeCallbacks(updateRunnablePosition);
                 } else {
                     mPlayButton.setImageResource(R.drawable.ic_baseline_pause_24);
                     mMusicPlayerService.play();
-
+                    //part of seekbar implementation
+//                    updatePosition();
                 }
             }
-
-//            if (mMediaPlayer.isPlaying()) {
-//                mPlayButton.setImageResource(R.drawable.ic_baseline_play_arrow_24);
-//                mMediaPlayer.pause();
-//                mHandler.removeCallbacks(updateRunnablePosition);
-//            } else {
-//                mPlayButton.setImageResource(R.drawable.ic_baseline_pause_24);
-//                mMediaPlayer.start();
-//                updatePosition();
-//            }
         });
 
+        //TODO update seekbar to work with service
 //        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 //            @Override
 //            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -354,6 +340,7 @@ public class MusicFragment extends Fragment {
         return view;
     }
 
+    //TODO alter updatePosition to work with service
 //    private void updatePosition() {
 //        mHandler.removeCallbacks(updateRunnablePosition);
 //        if (mMediaPlayer != null) mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());

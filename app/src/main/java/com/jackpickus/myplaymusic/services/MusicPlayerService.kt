@@ -25,6 +25,7 @@ private const val CHANNEL_DEFAULT_IMPORTANCE: String = "PRIORITY_LOW"
 class MusicPlayerService : Service() {
     private val localIBinder = LocalBinder()
     private var mMediaPlayer: MediaPlayer? = null
+    private lateinit var id: UUID
 
     inner class LocalBinder : Binder() {
         fun getService(): MusicPlayerService = this@MusicPlayerService
@@ -91,6 +92,10 @@ class MusicPlayerService : Service() {
 
         val currentSong: Music? = findSong(musicId)
 
+        if (musicId != null) {
+            id = musicId
+        }
+
         initMediaPlayer(currentSong)
 
         // If we get killed, after returning from here, restart
@@ -146,6 +151,10 @@ class MusicPlayerService : Service() {
             }
         }
         return false
+    }
+
+    fun getId(): UUID {
+        return id
     }
 
 }
