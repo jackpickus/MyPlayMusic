@@ -239,6 +239,10 @@ public class MusicFragment extends Fragment {
 
             if (!(currentPosition >= (MusicListFragment.newMusics.size() - 1))) {
                 mAlbumArtViewPager.setCurrentItem(currentPosition + 1);
+                Music nextSong = MusicListFragment.newMusics.get(currentPosition + 1);
+                mSongTitleTextView.setText(nextSong.getTitle());
+                mArtistTextView.setText(nextSong.getArtist());
+
             }
             //TODO implement fastforward to next song
 //             mMusicPlayerService.fastForward();
@@ -257,6 +261,9 @@ public class MusicFragment extends Fragment {
             int currentPosition = mAlbumArtViewPager.getCurrentItem();
             if (!(currentPosition <= 0)) {
                 mAlbumArtViewPager.setCurrentItem(currentPosition - 1);
+                Music nextSong = MusicListFragment.newMusics.get(currentPosition - 1);
+                mSongTitleTextView.setText(nextSong.getTitle());
+                mArtistTextView.setText(nextSong.getArtist());
             }
 
         });

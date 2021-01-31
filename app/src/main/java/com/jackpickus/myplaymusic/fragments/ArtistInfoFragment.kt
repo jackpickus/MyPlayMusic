@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jackpickus.myplaymusic.R
-import com.jackpickus.myplaymusic.activities.MusicPagerActivity
+import com.jackpickus.myplaymusic.activities.MusicActivity
 import com.jackpickus.myplaymusic.models.Music
 
 private const val ARG_ARTIST_ID:String = "music_artist"
@@ -62,7 +62,7 @@ class ArtistInfoFragment : Fragment() {
     }
 
     private fun songClicked(song: Music) {
-        val intent = MusicPagerActivity.newIntent(this.activity, song.id, song.artist);
+        val intent = MusicActivity.newIntent(this.activity, song.id)
         startActivity(intent)
     }
 
