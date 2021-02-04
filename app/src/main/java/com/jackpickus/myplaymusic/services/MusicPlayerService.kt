@@ -78,6 +78,7 @@ class MusicPlayerService : Service() {
         val notification: Notification = Notification.Builder(this, CHANNEL_DEFAULT_IMPORTANCE)
                 .setContentTitle(getText(R.string.notification_title))
                 .setContentText(getText(R.string.notification_message))
+                .setSmallIcon(R.drawable.music_note)
                 .setContentIntent(pendingIntent)
                 .setTicker(getText(R.string.ticker_text))
                 .build()
