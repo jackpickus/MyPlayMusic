@@ -12,7 +12,7 @@ import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.jackpickus.myplaymusic.R
-import com.jackpickus.myplaymusic.fragments.MusicFragment
+import com.jackpickus.myplaymusic.activities.MusicListActivity
 import com.jackpickus.myplaymusic.fragments.MusicListFragment
 import com.jackpickus.myplaymusic.models.Music
 import java.util.*
@@ -34,8 +34,10 @@ class MusicPlayerService : Service() {
     override fun onCreate() {
         super.onCreate()
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            Log.d(TAG, "onCreate() called with startServiceWithNotification()")
             startServiceWithNotification()
         } else {
+            Log.d(TAG, "onCreate() called with Notification() ie SDK < 26")
             startForeground(9999, Notification())
         }
 
@@ -69,7 +71,7 @@ class MusicPlayerService : Service() {
         notificationManager.createNotificationChannel(channel)
 
         val pendingIntent: PendingIntent =
-                Intent(this, MusicFragment::class.java).let { notificationIntent ->
+                Intent(this, MusicListActivity::class.java).let { notificationIntent ->
                     PendingIntent.getActivity(this, 0, notificationIntent, 0)
                 }
 
