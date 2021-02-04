@@ -8,6 +8,7 @@ import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,8 +60,8 @@ public class MusicFragment extends Fragment {
     MusicPlayerService mMusicPlayerService;
     boolean mBound = false;
 
-//    private final Handler mHandler = new Handler();
-//    private final Runnable updateRunnablePosition = this::updatePosition;
+    private final Handler mHandler = new Handler();
+    private final Runnable updateRunnablePosition = this::updatePosition;
 
     public static MusicFragment newInstance(UUID musicId) {
         Bundle args = new Bundle();
@@ -225,7 +226,6 @@ public class MusicFragment extends Fragment {
         mArtistTextView = view.findViewById(R.id.artist);
 
         mSeekBar = view.findViewById(R.id.song_playing_time);
-//        mSeekBar.setMax(mMediaPlayer.getDuration());
 
         mPlayButton = view.findViewById(R.id.play_image);
         mPlayButton.setImageResource(R.drawable.ic_baseline_pause_24);
@@ -314,45 +314,46 @@ public class MusicFragment extends Fragment {
                     mPlayButton.setImageResource(R.drawable.ic_baseline_play_arrow_24);
                     mMusicPlayerService.pause();
                     //TODO implement seekbar
-//                    mHandler.removeCallbacks(updateRunnablePosition);
+                    mHandler.removeCallbacks(updateRunnablePosition);
                 } else {
                     mPlayButton.setImageResource(R.drawable.ic_baseline_pause_24);
                     mMusicPlayerService.play();
                     //part of seekbar implementation
-//                    updatePosition();
+                    updatePosition();
                 }
             }
         });
 
         //TODO update seekbar to work with service
-//        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//            @Override
-//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//
-//            }
-//
-//            @Override
-//            public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//            }
-//
-//            @Override
-//            public void onStopTrackingTouch(SeekBar seekBar) {
-//                if (mMediaPlayer != null) {
-//                    mMediaPlayer.seekTo(seekBar.getProgress());
-//                }
-//            }
-//        });
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Log.d(TAG, "onStopTrackingTouch() with time: " + seekBar.getProgress());
+                if (mMusicPlayerService != null) {
+                    mMusicPlayerService.seekToSpot(seekBar.getProgress());
+                }
+            }
+        });
 
         return view;
     }
 
     //TODO alter updatePosition to work with service
-//    private void updatePosition() {
-//        mHandler.removeCallbacks(updateRunnablePosition);
-//        if (mMediaPlayer != null) mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
-//        mHandler.postDelayed(updateRunnablePosition, 1500);
-//    }
+    private void updatePosition() {
+        mHandler.removeCallbacks(updateRunnablePosition);
+        if (mMusicPlayerService != null) mSeekBar.setProgress(mMusicPlayerService.getCurrPosition());
+        mHandler.postDelayed(updateRunnablePosition, 1500);
+    }
 
 
     private final ServiceConnection connection = new ServiceConnection() {
@@ -360,6 +361,8 @@ public class MusicFragment extends Fragment {
         public void onServiceConnected(ComponentName name, IBinder service) {
             MusicPlayerService.LocalBinder localBinder = (MusicPlayerService.LocalBinder) service;
             mMusicPlayerService = localBinder.getService();
+            mSeekBar.setMax(mMusicPlayerService.getSongDuration());
+            updatePosition();
             mBound = true;
         }
 

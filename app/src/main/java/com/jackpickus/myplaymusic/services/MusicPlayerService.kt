@@ -160,4 +160,16 @@ class MusicPlayerService : Service() {
         return id
     }
 
+    fun getCurrPosition(): Int? {
+        return mMediaPlayer?.currentPosition
+    }
+
+    fun seekToSpot(spot: Int) {
+        mMediaPlayer?.seekTo((spot))
+    }
+
+    fun getSongDuration(): Int? {
+        return mMediaPlayer?.duration
+    }
+
 }
